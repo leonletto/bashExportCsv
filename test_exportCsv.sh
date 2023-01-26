@@ -9,6 +9,8 @@ if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 # 10 names in an array for testing
 Names=("Joe" "Frank" "Mary" "Dave" "Jasper" "Sarah" "Leon" "Jason" "Jeremy" "Elon" )
 DevicePlatforms=("Apple" "WinRt" "Android" "Apple" "Apple" "Apple" "WinRt" "WinRt" "WinRt" "WinRt" )
+OnelevelDeepArray=("One" "Two" "Three" "Four" "Five" "Six" "Seven" "Eight" "Nine" "Ten" )
+TwolevelDeepArray=("One" "Two" "Three" "Four" "Five" "Six" "Seven" "Eight" "Nine" "Ten" )
 
 
 #Test1 - Pass an array of Named objects and a csv file name
@@ -56,3 +58,23 @@ pk=("deviceId")
 export_csv "$tempBashArray" "./TestExportCsv5.csv" "" "Append" "${pk[@]}"
 tempBashArray=$(echo "$tempBashArray" | jq '. += [{"deviceId": "1", "deviceName": "Test_1TestDups", "deviceType": "Apple"}]' )
 export_csv "$tempBashArray" "./TestExportCsv5.csv" "" "Done" "${pk[@]}"
+
+#Test6 - Pass an array of objects with multiple levels of depth and make sure they are added to the csv file correctly
+# The extra field, OnelevelDeepArray contains an array of objects which should be added to the csv file with _ appended to the field name between levels
+# The third level for entry One is just "Three"
+
+tempBashArray=$(jq -n '[]')
+for i in {0..4}; do
+    tempBashArray=$(echo "$tempBashArray" | jq '. += [{"deviceId": "'"$i"'", "deviceName": "'"${Names[$i]}'s Device"'", "deviceType": "'"${DevicePlatforms[$i]}"'", "OnelevelDeepArray": []}]' )
+done
+#add some extra data One level deep
+for i in {0..4}; do
+    for j in {0..1}; do
+        tempBashArray=$(echo "$tempBashArray" | jq '.['"$i"'].OnelevelDeepArray += [{"OnelevelDeepArray": "'"${OnelevelDeepArray[$j]}"'"}]' )
+    done
+done
+echo "$tempBashArray"
+#add some extra data Two levels deep
+tempBashArray=$(echo "$tempBashArray" | jq '.[0].OnelevelDeepArray[2] = {"TwolevelDeepArray": "Three"}' )
+
+export_csv "$tempBashArray" "./TestExportCsv6.csv"

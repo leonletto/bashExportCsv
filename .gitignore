@@ -7,6 +7,8 @@ __pycache__/
 *.csv
 *.db*
 *.json
+submodules
+submodules/*
 
 # pyenv
 .python-version

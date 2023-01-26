@@ -5,7 +5,7 @@ set -o pipefail
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
 if [[ -d submodules/bashLogger ]]; then
-    source submodules/bashLogger/bashLogger.sh
+    source submodules/bashLogger/logger.sh
     log_level INFO
 fi
 
