@@ -4,6 +4,11 @@ set -o nounset
 set -o pipefail
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
+if [[ -d submodules/bashLogger ]]; then
+    source submodules/bashLogger/bashLogger.sh
+    log_level INFO
+fi
+
 export_csv(){
     # $1 - Required - the response from the api call or other source of json data
     # $2 - Required - the name of the csv file to export to

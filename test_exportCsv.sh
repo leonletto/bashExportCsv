@@ -49,7 +49,7 @@ tempBashArray=$(jq -n '[]')
 for i in {0..4}; do
     tempBashArray=$(echo "$tempBashArray" | jq '. += [{"deviceId": "'"$i"'", "deviceName": "'"${Names[$i]}'s Device"'", "deviceType": "'"${DevicePlatforms[$i]}"'"}]' )
 done
-export_csv "$tempBashArray" "./TestExportCsv4.csv" "" "" "" "Devices"
+export_csv "$tempBashArray" "./TestExportCsv4.csv" "" "" "" "" "" "Devices"
 
 #Test5 - Pass an array of objects with a duplicate and make sure they aren't added to the csv file
 pk=("deviceId")
