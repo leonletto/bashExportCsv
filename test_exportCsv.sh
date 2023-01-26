@@ -4,7 +4,7 @@ set -o nounset
 set -o pipefail
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi
 
-. ./exportCsv.sh
+. ./export_csv.sh
 
 # 10 names in an array for testing
 Names=( "Joe" "Frank" "Mary" "Dave" "Jasper" "Sarah" "Leon" "Jason" "Jeremy" "Elon" )
