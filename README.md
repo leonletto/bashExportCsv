@@ -16,7 +16,7 @@ using sqlite-utils and export the resulting database to csv using sqlite-utils.
 The speed is about 30x faster than using bash or jq alone since almost everything is done in c.  For example,
 exporting 40,000 records using jq and bash takes about 20 minutes vs 30 seconds using this script.
 
-I try to hide all of the complexity of the script from the user so that it is easy to use.  The script has some 
+I try to hide all the complexity of the script from the user so that it is easy to use.  The script has some 
 requirements though.  The script requires jq, and sqlite-utils.  
 
 ## Requirements
