@@ -141,15 +141,41 @@ export_csv(){
     newTmpJson="$tmpJson.json"
     mv "$tmpJson" "$newTmpJson"
     tmpJson="$newTmpJson"
-    if [[ "$logging" == "true" ]]; then
-        log_info "tmpJson: $tmpJson"
-    else
-        echo "tmpJson: $tmpJson"
-    fi
+#    if [[ "$logging" == "true" ]]; then
+#        log_info "tmpJson: $tmpJson"
+#    else
+#        echo "tmpJson: $tmpJson"
+#    fi
 
     if [[ -f $tmpJson ]]; then
         rm "$tmpJson"
         touch "$tmpJson"
+    fi
+
+    # check the response to see if it is an array or an object
+    if [[ "$(echo "${tmp_Response}" | jq -r 'type' 2> /dev/null)" == "array" ]]; then
+        if [[ "$logging" == "true" ]]; then
+            log_info "Response is an array"
+        else
+            echo "Response is an array"
+        fi
+    elif [[ "$(echo "${tmp_Response}" | jq -r 'type' 2> /dev/null)" == "object" ]]; then
+        if [[ "$logging" == "true" ]]; then
+            log_info "Response is an object"
+        else
+            echo "Response is an object"
+        fi
+    else
+        if [[ "$logging" == "true" ]]; then
+            log_error "you passed $tmp_Response"
+            log_error "You must pass an array or an object to this function as the first parameter"
+            log_error "eg: {\"ArrayName\": [{Object1}, {Object2}, {Object3}]}"
+        else
+            echo "you passed $tmp_Response"
+            echo "You must pass an array or an object to this function as the first parameter"
+            echo "eg: {\"ArrayName\": [{Object1}, {Object2}, {Object3}]}"
+        fi
+        exit 1
     fi
 
     # if the user passed in a name of an object, then we need to flatten the NAMED array of objects else just flatten the array of objects
